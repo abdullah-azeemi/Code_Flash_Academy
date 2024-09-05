@@ -44,4 +44,4 @@ backend/.env*.local
 public/
 frontend/.eslintrc.json
 frontend/next.config.mjs
-frontend/next
+frontend/.next

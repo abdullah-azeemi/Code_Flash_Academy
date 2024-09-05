@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 
-module.exports = (req, res, next) => {
+const authMiddleware = (req, res, next) => {
   const token = req.header('Authorization');
   if (!token) return res.status(401).json({ message: 'No token, authorization denied' });
 
@@ -9,6 +9,8 @@ module.exports = (req, res, next) => {
     req.user = decoded;
     next();
   } catch (error) {
-    res.status(401).json({ message: 'Token is not valid' });
+    res.status(401).json({ message: 'Invalid token' });
   }
 };
+
+module.exports = authMiddleware;

@@ -1,31 +1,16 @@
 const express = require('express');
+const { queryStackAI } = require('../services/stackAIService');
 const router = express.Router();
-const Roadmap = require('../models/Roadmap');
-const authMiddleware = require('../middlewares/authMiddleware');
+const authMiddleware = require('../middlewares/authMiddleware'); // Add authentication middleware if needed
 
-// Create a new roadmap
 router.post('/', authMiddleware, async (req, res) => {
-  try {
-    const { roadmapData } = req.body;
-    const newRoadmap = new Roadmap({
-      userId: req.user.id,
-      roadmapData,
-    });
+  const { prompt } = req.body;
 
-    await newRoadmap.save();
-    res.status(201).json({ message: 'Roadmap created successfully' });
-  } catch (error) {
-    res.status(500).json({ message: 'Server error' });
-  }
-});
-
-// Get roadmaps by user
-router.get('/', authMiddleware, async (req, res) => {
   try {
-    const roadmaps = await Roadmap.find({ userId: req.user.id });
-    res.json(roadmaps);
+    const response = await queryStackAI({ 'user_id': req.user.id, 'in-0': prompt });
+    res.json(response);
   } catch (error) {
-    res.status(500).json({ message: 'Server error' });
+    res.status(500).json({ message: 'Error generating roadmap' });
   }
 });
 

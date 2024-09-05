@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+require('dotenv').config();
 
 const app = express();
 
@@ -10,13 +11,7 @@ app.use(bodyParser.json());
 
 // Routes
 app.use('/api/auth', require('./routes/authRoutes'));
-app.use('/api/roadmap', require('./routes/roadmapRoutes'));
-app.use('/api/admin', require('./routes/adminRoutes'));
-
-// middleware
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).send('Something broke!');
-});
+app.use('/api/roadmap', require('./routes/roadmapRoutes')); 
+app.use('/api/flashcards', require('./routes/flashcardRoutes'));  
 
 module.exports = app;
